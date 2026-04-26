@@ -8,17 +8,31 @@ os.environ.setdefault("DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/t
 from notifier import send
 
 _WEBHOOK_URL = "https://discord.com/api/webhooks/test/token"
+_EMBEDS = [{"title": "テスト", "color": 0x5DADE2}]
 
 
-def test_send_posts_correct_payload():
+def test_send_posts_embeds_only():
     mock_resp = Mock()
 
     with patch("notifier.requests.post", return_value=mock_resp) as mock_post:
-        send("テストメッセージ")
+        send(_EMBEDS)
 
     mock_post.assert_called_once_with(
         _WEBHOOK_URL,
-        json={"content": "テストメッセージ", "flags": 4},
+        json={"embeds": _EMBEDS},
+        timeout=10,
+    )
+
+
+def test_send_posts_content_with_embeds():
+    mock_resp = Mock()
+
+    with patch("notifier.requests.post", return_value=mock_resp) as mock_post:
+        send(_EMBEDS, content="おはようございます！")
+
+    mock_post.assert_called_once_with(
+        _WEBHOOK_URL,
+        json={"embeds": _EMBEDS, "content": "おはようございます！"},
         timeout=10,
     )
 
@@ -27,7 +41,7 @@ def test_send_calls_raise_for_status():
     mock_resp = Mock()
 
     with patch("notifier.requests.post", return_value=mock_resp):
-        send("メッセージ")
+        send(_EMBEDS)
 
     mock_resp.raise_for_status.assert_called_once()
 
@@ -38,4 +52,4 @@ def test_send_raises_on_http_error():
 
     with patch("notifier.requests.post", return_value=mock_resp):
         with pytest.raises(Exception, match="403"):
-            send("メッセージ")
+            send(_EMBEDS)

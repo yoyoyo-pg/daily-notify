@@ -4,30 +4,13 @@
 
 ## 通知イメージ
 
-```
-☀️ おはようございます！4/26(日)
+Discord の Embed（カード形式）で3枚のカードを送信する。
 
-🌤 今日の名古屋の天気: 晴れ
-　　気温: 22°C（最高 25°C / 最低 17°C）
-　　降水確率: 10%
-　　https://wttr.in/Nagoya
-
-📅 今日の予定
-　・10:00 チームミーティング
-　・14:00 1on1
-
-📅 今日の予定
-　・10:00 チームミーティング
-　・14:00 1on1
-
-📰 今日のニュース
-　【政治】〇〇〇〇
-　【経済】〇〇〇〇
-　【国際】〇〇〇〇
-　【AI】〇〇〇〇
-　【セキュリティ】〇〇〇〇
-　【Zenn】〇〇〇〇
-```
+| カード | 色 | 内容 |
+|--------|-----|------|
+| 🌤 天気 | 青 | 天気概況・気温・降水確率。タイトルクリックで wttr.in へ |
+| 📅 カレンダー | 緑 | 当日の予定一覧（予定なしの場合はその旨表示） |
+| 📰 ニュース | オレンジ | カテゴリごとに記事タイトル（リンク付き）をフィールド表示 |
 
 ## セットアップ
 
@@ -101,7 +84,7 @@ python src/main.py
 
 設定後は毎朝7時(JST)に自動実行される（GitHub Actions cron: `0 22 * * *` UTC）。
 
-masterへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
+mainへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
 
 ## ニュースソース一覧
 
@@ -116,13 +99,41 @@ masterへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_U
 
 各カテゴリ1件ずつ取得。フィードが取得できない場合は空リストにフォールバックする。
 
-## AI コーディングツールのセットアップ
+## 開発ツールのセットアップ
 
-このリポジトリは Claude Code と Codex CLI での作業を想定している。Node.js 18+ が前提。
+このリポジトリは Claude Code・Codex CLI・GitHub CLI での作業を想定している。Node.js 18+ が前提。
+
+### GitHub CLI
+
+GitHub CLI（`gh`）を使うとターミナルから PR 作成などの GitHub 操作が行える。
+
+**Windows（winget）**
+
+```powershell
+winget install --id GitHub.cli -e
+```
+
+インストール後は**新しいターミナルを開いて** PATH を反映させること。
+
+**Mac**
+
+```bash
+brew install gh
+```
+
+**ログイン**
+
+```bash
+gh auth login
+```
+
+対話式で「GitHub.com」→「HTTPS」→「Login with a web browser」を選択するとブラウザ認証できる。
+
+> PowerShell でパスが通っていない場合は `& "C:\Program Files\GitHub CLI\gh.exe" auth login` で直接実行できる。
 
 ### Claude Code
 
-Anthropic が提供するターミナル向け AI コーディングアシスタント。
+Anthropic が提供するターミナル向け AI コーディングアシスタント。Node.js 18+ が必要。
 
 ```bash
 npm install -g @anthropic-ai/claude-code
