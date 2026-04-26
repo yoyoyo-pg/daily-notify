@@ -1,6 +1,6 @@
 # morning-notify
 
-毎朝7時に天気・Googleカレンダー・ニュースをまとめてDiscordに通知するPythonアプリ。
+毎朝6時に天気・Googleカレンダー・ニュースをまとめてDiscordに通知するPythonアプリ。
 
 ## 通知イメージ
 
@@ -94,7 +94,7 @@ python src/main.py
 | `GOOGLE_CLIENT_SECRET` | Google Cloud Console で発行（Google Calendar連携時） |
 | `GOOGLE_REFRESH_TOKEN` | `scripts/get_token.py` で取得（Google Calendar連携時） |
 
-設定後は毎朝7時(JST)に自動実行される（GitHub Actions cron: `0 22 * * *` UTC）。
+設定後は毎朝6時(JST)に自動実行される（GitHub Actions cron: `0 21 * * *` UTC）。
 
 masterへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
 
