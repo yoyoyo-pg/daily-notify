@@ -12,7 +12,7 @@ morning-notify/
 ├── src/
 │   ├── main.py          # エントリーポイント。各モジュールを呼び出して通知を組み立てる
 │   ├── weather.py       # wttr.in APIで名古屋の天気を取得
-│   ├── calendar.py      # Google Calendar APIで当日の予定を取得
+│   ├── gcalendar.py     # Google Calendar APIで当日の予定を取得
 │   ├── news.py          # RSSフィードから日本語ニュースを取得
 │   └── notifier.py      # Discordへ通知を送信
 ├── tests/
@@ -26,8 +26,8 @@ morning-notify/
 GitHub Actions (cron: 0 22 * * * UTC = 毎朝7時 JST)
 └── src/main.py
     ├── weather.py     → wttr.in JSON API で名古屋の天気取得（APIキー不要）
-    ├── calendar.py    → Google Calendar API（OAuth2 refresh token 認証）
-    ├── news.py        → feedparser で日本語RSSを取得（政治・経済・技術・AI・セキュリティ 各2件）
+    ├── gcalendar.py   → Google Calendar API（OAuth2 refresh token 認証）
+    ├── news.py        → feedparser で日本語RSSを取得（政治・経済・国際・AI・セキュリティ・Zenn 各1件）
     └── notifier.py    → Discord Webhook で通知送信
 ```
 
