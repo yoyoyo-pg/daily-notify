@@ -3,12 +3,13 @@ import feedparser
 _FEEDS = {
     "政治":       "https://www3.nhk.or.jp/rss/news/cat04.xml",
     "経済":       "https://www3.nhk.or.jp/rss/news/cat05.xml",
-    "技術":       "https://rss.itmedia.co.jp/rss/2.0/news_bursts.xml",
+    "国際":       "https://www3.nhk.or.jp/rss/news/cat06.xml",
     "AI":         "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml",
     "セキュリティ": "https://rss.itmedia.co.jp/rss/2.0/security.xml",
+    "Zenn":       "https://zenn.dev/feed",
 }
 
-_ITEMS_PER_CATEGORY = 2
+_ITEMS_PER_CATEGORY = 1
 
 
 def get_news() -> dict[str, list[tuple[str, str]]]:
