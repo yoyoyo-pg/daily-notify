@@ -6,7 +6,8 @@
       "Bash(git push *)",
       "Bash(gh pr *)",
       "Bash(pytest *)",
-      "PowerShell(python -m pytest tests/ -v)"
+      "PowerShell(python -m pytest tests/ -v)",
+      "Bash(python *)"
     ]
   }
 }
