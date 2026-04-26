@@ -7,6 +7,7 @@ load_dotenv()
 from weather import get_weather
 from gcalendar import get_today_events
 from news import get_news
+from journal import create_journal_page
 from notifier import send
 
 _JST = timezone(timedelta(hours=9))
@@ -15,6 +16,7 @@ _WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
 _COLOR_WEATHER = 0x5DADE2
 _COLOR_CALENDAR = 0x2ECC71
 _COLOR_NEWS = 0xE67E22
+_COLOR_JOURNAL = 0x9B59B6
 
 
 def build_embeds() -> tuple[str, list[dict]]:
@@ -76,6 +78,18 @@ def build_embeds() -> tuple[str, list[dict]]:
             "color": _COLOR_NEWS,
         }
     embeds.append(news_embed)
+
+    try:
+        journal_title = f"ジャーナル {now.year}/{now.month:02d}/{now.day:02d}({_WEEKDAYS[now.weekday()]})"
+        journal_url = create_journal_page(journal_title)
+        embeds.append({
+            "title": "📓 今日のジャーナル",
+            "description": f"[Notionで開く →]({journal_url})",
+            "color": _COLOR_JOURNAL,
+            "url": journal_url,
+        })
+    except Exception:
+        pass
 
     return greeting, embeds
 
