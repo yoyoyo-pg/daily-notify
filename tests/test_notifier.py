@@ -18,7 +18,7 @@ def test_send_posts_correct_payload():
 
     mock_post.assert_called_once_with(
         _WEBHOOK_URL,
-        json={"content": "テストメッセージ"},
+        json={"content": "テストメッセージ", "flags": 4},
         timeout=10,
     )
 
