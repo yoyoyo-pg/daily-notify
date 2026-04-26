@@ -5,7 +5,7 @@ from news import get_news
 
 def _make_feed(titles: list[str]) -> MagicMock:
     feed = MagicMock()
-    feed.entries = [MagicMock(title=t) for t in titles]
+    feed.entries = [MagicMock(title=t, link=f"https://example.com/{t}") for t in titles]
     return feed
 
 
@@ -20,10 +20,10 @@ def test_get_news_returns_two_per_category():
     with patch("news.feedparser.parse", side_effect=feeds):
         result = get_news()
 
-    assert result["政治"] == ["政治1", "政治2"]
-    assert result["経済"] == ["経済1", "経済2"]
-    assert result["技術"] == ["技術1", "技術2"]
-    assert result["AI"] == ["AI1", "AI2"]
+    assert result["政治"] == [("政治1", "https://example.com/政治1"), ("政治2", "https://example.com/政治2")]
+    assert result["経済"] == [("経済1", "https://example.com/経済1"), ("経済2", "https://example.com/経済2")]
+    assert result["技術"] == [("技術1", "https://example.com/技術1"), ("技術2", "https://example.com/技術2")]
+    assert result["AI"] == [("AI1", "https://example.com/AI1"), ("AI2", "https://example.com/AI2")]
 
 
 def test_get_news_truncates_to_two():
