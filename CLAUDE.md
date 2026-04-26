@@ -14,6 +14,7 @@ morning-notify/
 │   ├── weather.py       # wttr.in APIで名古屋の天気を取得
 │   ├── gcalendar.py     # Google Calendar APIで当日の予定を取得
 │   ├── news.py          # RSSフィードから日本語ニュースを取得
+│   ├── journal.py       # Notionに日次ジャーナルページを作成
 │   └── notifier.py      # Discordへ通知を送信
 ├── tests/
 ├── requirements.txt
@@ -28,6 +29,7 @@ GitHub Actions (cron: 0 22 * * * UTC = 毎朝7時 JST)
     ├── weather.py     → wttr.in JSON API で名古屋の天気取得（APIキー不要）
     ├── gcalendar.py   → Google Calendar API（OAuth2 refresh token 認証）
     ├── news.py        → feedparser で日本語RSSを取得（政治・経済・国際・AI・セキュリティ・Zenn 各1件）
+    ├── journal.py     → Notion API で日次ジャーナルページを作成（NOTION_API_KEY 未設定時はスキップ）
     └── notifier.py    → Discord Webhook で通知送信
 ```
 
@@ -50,6 +52,8 @@ pytest tests/test_weather.py           # 単一テスト実行
 | `GOOGLE_CLIENT_SECRET` | Google OAuth クライアントシークレット |
 | `GOOGLE_REFRESH_TOKEN` | Google Calendar アクセス用リフレッシュトークン |
 | `DISCORD_WEBHOOK_URL` | Discord Webhook URL |
+| `NOTION_API_KEY` | Notion インテグレーショントークン（未設定時はジャーナル機能をスキップ） |
+| `NOTION_PARENT_PAGE_ID` | ジャーナルページを作成する親ページのID |
 
 ## 開発ルール
 

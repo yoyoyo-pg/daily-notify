@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr *)",
+      "Bash(pytest *)",
+      "PowerShell(python -m pytest tests/ -v)",
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(winget install *)",
+      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" --version)"
+    ]
+  }
+}
