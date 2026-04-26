@@ -7,8 +7,10 @@
 ```
 ☀️ おはようございます！4/26(日)
 
-🌤 今日の天気: 名古屋 晴れ 22°C
+🌤 今日の名古屋の天気: 晴れ
+　　気温: 22°C（最高 25°C / 最低 17°C）
 　　降水確率: 10%
+　　https://wttr.in/Nagoya
 
 📅 今日の予定
 　・10:00 チームミーティング
@@ -19,6 +21,7 @@
 　【経済】〇〇〇〇
 　【技術】〇〇〇〇
 　【AI】　〇〇〇〇
+　【セキュリティ】〇〇〇〇
 ```
 
 ## セットアップ
@@ -86,12 +89,14 @@ python src/main.py
 
 | Secret名 | 内容 |
 |----------|------|
-| `GOOGLE_CLIENT_ID` | Google Cloud Console で発行 |
-| `GOOGLE_CLIENT_SECRET` | Google Cloud Console で発行 |
-| `GOOGLE_REFRESH_TOKEN` | `scripts/get_token.py` で取得 |
 | `DISCORD_WEBHOOK_URL` | Discord チャンネルの設定から発行 |
+| `GOOGLE_CLIENT_ID` | Google Cloud Console で発行（Google Calendar連携時） |
+| `GOOGLE_CLIENT_SECRET` | Google Cloud Console で発行（Google Calendar連携時） |
+| `GOOGLE_REFRESH_TOKEN` | `scripts/get_token.py` で取得（Google Calendar連携時） |
 
 設定後は毎朝7時(JST)に自動実行される（GitHub Actions cron: `0 22 * * *` UTC）。
+
+masterへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
 
 ## AI コーディングツールのセットアップ
 
