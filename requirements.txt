@@ -3,4 +3,5 @@ feedparser>=6.0
 # google-auth-oauthlib>=1.0      # TODO: Google Calendar 連携（未実装）
 # google-auth-httplib2>=0.1      # TODO: Google Calendar 連携（未実装）
 python-dotenv>=1.0
+pytest>=8.0
 requests>=2.28
