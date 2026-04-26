@@ -7,7 +7,10 @@
       "Bash(gh pr *)",
       "Bash(pytest *)",
       "PowerShell(python -m pytest tests/ -v)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(winget install *)",
+      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" --version)"
     ]
   }
 }
