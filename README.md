@@ -1,6 +1,6 @@
 # morning-notify
 
-毎朝7時に天気・Googleカレンダー・ニュースをまとめてDiscordに通知するPythonアプリ。
+毎朝6時に天気・Googleカレンダー・ニュースをまとめてDiscordに通知するPythonアプリ。
 
 ## 通知イメージ
 
@@ -133,7 +133,7 @@ python src/main.py
 | `NOTION_API_KEY` | Notion インテグレーションシークレット（Notion連携時） |
 | `NOTION_PARENT_PAGE_ID` | ジャーナルを作成する親ページのID（Notion連携時） |
 
-設定後は毎朝7時(JST)に自動実行される（GitHub Actions cron: `0 22 * * *` UTC）。
+設定後は毎朝6時(JST)に自動実行される（GitHub Actions cron: `0 21 * * *` UTC）。
 
 mainへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
 

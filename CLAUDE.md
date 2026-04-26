@@ -24,7 +24,7 @@ morning-notify/
 ## アーキテクチャ
 
 ```
-GitHub Actions (cron: 0 22 * * * UTC = 毎朝7時 JST)
+GitHub Actions (cron: 0 21 * * * UTC = 毎朝6時 JST)
 └── src/main.py
     ├── weather.py     → wttr.in JSON API で名古屋の天気取得（APIキー不要）
     ├── gcalendar.py   → Google Calendar API（OAuth2 refresh token 認証）
