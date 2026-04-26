@@ -7,8 +7,10 @@
 ```
 ☀️ おはようございます！4/26(日)
 
-🌤 今日の天気: 名古屋 晴れ 22°C
+🌤 今日の名古屋の天気: 晴れ
+　　気温: 22°C（最高 25°C / 最低 17°C）
 　　降水確率: 10%
+　　https://wttr.in/Nagoya
 
 📅 今日の予定
 　・10:00 チームミーティング
@@ -17,8 +19,10 @@
 📰 今日のニュース
 　【政治】〇〇〇〇
 　【経済】〇〇〇〇
-　【技術】〇〇〇〇
-　【AI】　〇〇〇〇
+　【国際】〇〇〇〇
+　【AI】〇〇〇〇
+　【セキュリティ】〇〇〇〇
+　【Zenn】〇〇〇〇
 ```
 
 ## セットアップ
@@ -92,6 +96,21 @@ python src/main.py
 | `DISCORD_WEBHOOK_URL` | Discord チャンネルの設定から発行 |
 
 設定後は毎朝7時(JST)に自動実行される（GitHub Actions cron: `0 22 * * *` UTC）。
+
+masterへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
+
+## ニュースソース一覧
+
+| カテゴリ | ソース | RSS URL |
+|---------|--------|---------|
+| 政治 | Yahoo!ニュース | `https://news.yahoo.co.jp/rss/topics/politics.xml` |
+| 経済 | Yahoo!ニュース | `https://news.yahoo.co.jp/rss/topics/business.xml` |
+| 国際 | Yahoo!ニュース | `https://news.yahoo.co.jp/rss/topics/world.xml` |
+| AI | ITmedia AIPlus | `https://rss.itmedia.co.jp/rss/2.0/aiplus.xml` |
+| セキュリティ | ITmedia Security | `https://rss.itmedia.co.jp/rss/2.0/security.xml` |
+| Zenn | Zenn トレンド | `https://zenn.dev/feed` |
+
+各カテゴリ1件ずつ取得。フィードが取得できない場合は空リストにフォールバックする。
 
 ## AI コーディングツールのセットアップ
 
