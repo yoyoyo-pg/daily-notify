@@ -98,6 +98,19 @@ python src/main.py
 
 masterへのPR作成時にはテストが自動実行され、`DISCORD_WEBHOOK_URL` に実際の通知が送信される。
 
+## ニュースソース一覧
+
+| カテゴリ | ソース | RSS URL |
+|---------|--------|---------|
+| 政治 | Yahoo!ニュース | `https://news.yahoo.co.jp/rss/topics/politics.xml` |
+| 経済 | Yahoo!ニュース | `https://news.yahoo.co.jp/rss/topics/business.xml` |
+| 国際 | Yahoo!ニュース | `https://news.yahoo.co.jp/rss/topics/world.xml` |
+| AI | ITmedia AIPlus | `https://rss.itmedia.co.jp/rss/2.0/aiplus.xml` |
+| セキュリティ | ITmedia Security | `https://rss.itmedia.co.jp/rss/2.0/security.xml` |
+| Zenn | Zenn トレンド | `https://zenn.dev/feed` |
+
+各カテゴリ1件ずつ取得。フィードが取得できない場合は空リストにフォールバックする。
+
 ## AI コーディングツールのセットアップ
 
 このリポジトリは Claude Code と Codex CLI での作業を想定している。Node.js 18+ が前提。
