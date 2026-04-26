@@ -19,7 +19,7 @@ def test_send_posts_correct_payload():
 
     mock_post.assert_called_once_with(
         _WEBHOOK_URL,
-        json={"embeds": _EMBEDS, "flags": 4},
+        json={"embeds": _EMBEDS},
         timeout=10,
     )
 
