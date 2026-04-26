@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from weather import get_weather
-# from gcalendar import get_today_events  # TODO: Google Calendar 連携（未実装）
+from gcalendar import get_today_events
 from news import get_news
 from notifier import send
 
@@ -32,16 +32,15 @@ def build_message() -> str:
 
     lines.append("")
 
-    # TODO: Google Calendar 連携（未実装）
-    # lines.append("📅 今日の予定")
-    # try:
-    #     events = get_today_events()
-    #     if events:
-    #         lines += [f"　・{e['time']} {e['summary']}" for e in events]
-    #     else:
-    #         lines.append("　予定はありません")
-    # except Exception:
-    #     lines.append("　予定を取得できませんでした")
+    lines.append("📅 今日の予定")
+    try:
+        events = get_today_events()
+        if events:
+            lines += [f"　・{e['time']} {e['summary']}" for e in events]
+        else:
+            lines.append("　予定はありません")
+    except Exception:
+        lines.append("　予定を取得できませんでした")
 
     lines.append("")
 
