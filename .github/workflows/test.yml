@@ -25,12 +25,4 @@ jobs:
       - name: Send test notification to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          python - <<'EOF'
-          import os, requests
-          url = os.environ["DISCORD_WEBHOOK_URL"]
-          requests.post(url, json={
-              "content": "[CI] Discord通知テスト（PR #${{ github.event.pull_request.number }}）",
-              "flags": 4,
-          }, timeout=10).raise_for_status()
-          EOF
+        run: python src/main.py
