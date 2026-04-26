@@ -17,15 +17,15 @@ _COLOR_CALENDAR = 0x2ECC71
 _COLOR_NEWS = 0xE67E22
 
 
-def build_embeds() -> list[dict]:
+def build_embeds() -> tuple[str, list[dict]]:
     now = datetime.now(_JST)
     date_str = f"{now.month}/{now.day}({_WEEKDAYS[now.weekday()]})"
+    greeting = f"☀️ おはようございます！{date_str}"
     embeds = []
 
     try:
         w = get_weather()
         weather_embed = {
-            "author": {"name": f"☀️ おはようございます！{date_str}"},
             "title": f"🌤 名古屋の天気：{w['desc']}",
             "url": w["url"],
             "color": _COLOR_WEATHER,
@@ -36,7 +36,6 @@ def build_embeds() -> list[dict]:
         }
     except Exception:
         weather_embed = {
-            "author": {"name": f"☀️ おはようございます！{date_str}"},
             "title": "🌤 天気情報を取得できませんでした",
             "color": _COLOR_WEATHER,
         }
@@ -78,8 +77,9 @@ def build_embeds() -> list[dict]:
         }
     embeds.append(news_embed)
 
-    return embeds
+    return greeting, embeds
 
 
 if __name__ == "__main__":
-    send(build_embeds())
+    greeting, embeds = build_embeds()
+    send(embeds, content=greeting)

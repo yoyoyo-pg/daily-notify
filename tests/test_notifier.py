@@ -11,7 +11,7 @@ _WEBHOOK_URL = "https://discord.com/api/webhooks/test/token"
 _EMBEDS = [{"title": "テスト", "color": 0x5DADE2}]
 
 
-def test_send_posts_correct_payload():
+def test_send_posts_embeds_only():
     mock_resp = Mock()
 
     with patch("notifier.requests.post", return_value=mock_resp) as mock_post:
@@ -20,6 +20,19 @@ def test_send_posts_correct_payload():
     mock_post.assert_called_once_with(
         _WEBHOOK_URL,
         json={"embeds": _EMBEDS},
+        timeout=10,
+    )
+
+
+def test_send_posts_content_with_embeds():
+    mock_resp = Mock()
+
+    with patch("notifier.requests.post", return_value=mock_resp) as mock_post:
+        send(_EMBEDS, content="おはようございます！")
+
+    mock_post.assert_called_once_with(
+        _WEBHOOK_URL,
+        json={"embeds": _EMBEDS, "content": "おはようございます！"},
         timeout=10,
     )
 
