@@ -6,7 +6,11 @@ from weather import get_weather
 
 _MOCK_DATA = {
     "current_condition": [{"temp_C": "22", "weatherDesc": [{"value": "晴れ"}]}],
-    "weather": [{"hourly": [{"chanceofrain": "10"}, {"chanceofrain": "30"}, {"chanceofrain": "5"}]}],
+    "weather": [{
+        "maxtempC": "28",
+        "mintempC": "18",
+        "hourly": [{"chanceofrain": "10"}, {"chanceofrain": "30"}, {"chanceofrain": "5"}],
+    }],
 }
 
 
@@ -17,13 +21,24 @@ def test_get_weather_returns_expected_fields():
     with patch("weather.requests.get", return_value=mock_resp):
         result = get_weather()
 
-    assert result == {"desc": "晴れ", "temp": "22", "precip_prob": 30}
+    assert result == {
+        "desc": "晴れ",
+        "temp": "22",
+        "temp_max": "28",
+        "temp_min": "18",
+        "precip_prob": 30,
+        "url": "https://wttr.in/Nagoya",
+    }
 
 
 def test_get_weather_uses_max_precip():
     data = {
         "current_condition": [{"temp_C": "15", "weatherDesc": [{"value": "曇り"}]}],
-        "weather": [{"hourly": [{"chanceofrain": "50"}, {"chanceofrain": "80"}, {"chanceofrain": "20"}]}],
+        "weather": [{
+            "maxtempC": "20",
+            "mintempC": "10",
+            "hourly": [{"chanceofrain": "50"}, {"chanceofrain": "80"}, {"chanceofrain": "20"}],
+        }],
     }
     mock_resp = Mock()
     mock_resp.json.return_value = data

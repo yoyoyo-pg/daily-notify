@@ -22,8 +22,10 @@ def build_message() -> str:
     try:
         w = get_weather()
         lines += [
-            f"🌤 今日の天気: 名古屋 {w['desc']} {w['temp']}°C",
+            f"🌤 今日の名古屋の天気: {w['desc']}",
+            f"　　気温: {w['temp']}°C（最高 {w['temp_max']}°C / 最低 {w['temp_min']}°C）",
             f"　　降水確率: {w['precip_prob']}%",
+            f"　　{w['url']}",
         ]
     except Exception:
         lines.append("🌤 天気情報を取得できませんでした")
