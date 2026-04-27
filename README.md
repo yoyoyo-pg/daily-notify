@@ -93,6 +93,8 @@ python src/main.py
 | `GOOGLE_CLIENT_ID` | Google Cloud Console で発行（Google Calendar連携時） |
 | `GOOGLE_CLIENT_SECRET` | Google Cloud Console で発行（Google Calendar連携時） |
 | `GOOGLE_REFRESH_TOKEN` | `scripts/get_token.py` で取得（Google Calendar連携時） |
+| `NOTION_API_KEY` | Notion インテグレーションページで発行 |
+| `NOTION_DATABASE_ID` | 記録先Notionデータベースのページ ID |
 
 設定後は毎朝7時(JST)に自動実行される（GitHub Actions cron: `0 22 * * *` UTC）。
 

@@ -1,4 +1,5 @@
 feedparser>=6.0
+notion-client>=2.0
 # google-api-python-client>=2.0  # TODO: Google Calendar 連携（未実装）
 # google-auth-oauthlib>=1.0      # TODO: Google Calendar 連携（未実装）
 # google-auth-httplib2>=0.1      # TODO: Google Calendar 連携（未実装）
