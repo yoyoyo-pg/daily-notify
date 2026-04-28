@@ -1,18 +1,22 @@
 {
   "permissions": {
     "allow": [
+      "Bash(git status)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git checkout *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)",
+      "Bash(git commit -m *)",
       "Bash(git push *)",
-      "Bash(gh pr *)",
-      "Bash(pytest *)",
-      "PowerShell(python -m pytest tests/ -v)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
       "Bash(python *)",
       "Bash(pip install *)",
-      "Bash(winget install *)",
-      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" --version)",
-      "Bash(git checkout *)",
-      "Bash(git pull *)"
+      "Bash(pytest *)"
     ]
   }
 }
