@@ -73,16 +73,19 @@ pytest tests/test_weather.py           # 単一テスト実行
 
 ```bash
 # 現状確認
-git log --oneline -5   # 最近のコミット・マージ済みPRの確認
-gh pr list             # 現在オープンなPR一覧
+git log --oneline -5              # 最近のコミット・マージ済みPRの確認
+gh pr list --state all --limit 10 # PR一覧（open・merged・closed すべて表示）
 
 # マージ済みローカルブランチの削除
 git fetch --prune
 git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/null || true
 ```
 
+`gh pr list --state all` でマージ済みPRも一覧に出るため、現在のブランチが既にマージ済みかどうかを判断できる。
 `git fetch --prune` でリモートで削除済みのブランチを追跡情報から外し、
 `git branch -d`（小文字）で未マージのブランチは残しつつマージ済みだけ削除する。
+
+**作業前の必須確認**: 既存ブランチで作業を続ける前に `gh pr view` を実行し、そのブランチのPRがマージ・クローズ済みでないかを確認する。マージ済みの場合は必ず新しいブランチを切る。
 
 ## 開発ルール
 
