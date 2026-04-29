@@ -2,17 +2,19 @@
 
 ## プロジェクト概要
 
-毎朝6時(JST)に天気・Googleカレンダー・ニュースをDiscordへ通知するPythonスクリプト。GitHub Actionsで定期実行する。
+毎朝6時(JST)に天気・Googleカレンダー・ニュースをDiscordへ通知し、毎晩21時(JST)に振り返りリマインダーを送るPythonスクリプト。GitHub Actionsで定期実行する。
 
 ## リポジトリ構成
 
 ```
 morning-notify/
 ├── .github/workflows/
-│   ├── morning-notify.yml  # スケジュール実行定義（毎朝6時 JST）
-│   └── test.yml            # PRテスト（pytest + Discord通知テスト）
+│   ├── morning-notify.yml  # 朝の通知（毎朝6時 JST）
+│   ├── evening-notify.yml  # 夜の振り返りリマインダー（毎晩21時 JST）
+│   └── test.yml            # PRテスト（pytest）
 ├── src/
-│   ├── main.py             # エントリーポイント。各モジュールを呼び出して通知を組み立てる
+│   ├── main.py             # 朝通知エントリーポイント。各モジュールを呼び出して通知を組み立てる
+│   ├── main_evening.py     # 夜通知エントリーポイント。振り返りリマインダーを送信する
 │   ├── weather.py          # wttr.in APIで名古屋の天気を取得
 │   ├── gcalendar.py        # Google Calendar APIで当日の予定を取得（要: GOOGLE_* 環境変数）
 │   ├── news.py             # RSSフィードから日本語ニュースを取得（政治・経済・国際・AI・セキュリティ・Zenn）
@@ -24,9 +26,11 @@ morning-notify/
 │   ├── test_news.py
 │   ├── test_notifier.py
 │   ├── test_calendar.py
-│   └── test_journal.py
+│   ├── test_journal.py
+│   └── test_evening.py
 ├── docs/
 │   ├── ideas.md            # 開発アイデアメモ
+│   ├── lessons.md          # 実装を通じて得た教訓
 │   └── ai-coding-experience.md  # AIコーディング体験記
 ├── pytest.ini              # pythonpath = src を設定済み
 ├── requirements.txt
@@ -93,6 +97,9 @@ git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/
 - ブランチ名は `claude/<作業内容>` の形式にする
 - 実装が完了したらmainへのプルリクエストを作成する
 - PRを作成すると `test.yml` が自動で走り、pytest が実行される
+- **実装完了後、以下を必ず更新する**
+  - `README.md` — 通知イメージ・今後の展望・各種説明が実態と合っているか確認・修正する
+  - `CLAUDE.md` — リポジトリ構成・プロジェクト概要に新ファイルや変更を反映する
 
 ## 制約
 
@@ -140,7 +147,7 @@ git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/
 
 ## マルチエージェント作業方針
 
-複雑な作業（調査範囲が広い・実装とレビューを分けたい）は、1つの会話に詰め込まず、役割ごとにサブエージェントを使い分ける。
+実装を伴う作業は原則マルチエージェントで進める。1つの会話に詰め込まず、役割ごとにサブエージェントを使い分ける。
 
 ### 役割構成
 
@@ -155,11 +162,15 @@ git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/
 
 ### いつ使うか
 
-| 使う | 使わない |
-|------|---------|
-| 調査→実装→レビューが必要な新機能追加 | 1ファイルの軽微な修正 |
-| 外部情報（RSS、API、ドキュメント）の調査が必要 | バグ修正やリファクタ |
-| コードレビューの観点を実装と分けたい | 単純な設定変更 |
+**使う（以下のいずれかに該当する場合）**
+- 新しいファイルを作成する（src/*.py、workflows/*.yml、tests/*.py など）
+- 複数ファイルにまたがる実装をする
+- 外部情報（RSS、API仕様、ドキュメント）の調査が必要
+- レビューの観点を実装と分けたい
+
+**使わない（すべて該当する場合のみ）**
+- 既存ファイル1〜2件の軽微な修正
+- かつ、ロジックの変更を伴わない（文言修正・設定変更・ドキュメント更新）
 
 ### 各役割の使い方
 
