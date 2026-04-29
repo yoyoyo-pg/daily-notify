@@ -22,3 +22,6 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code ローカル設定（個人用。プロジェクト共通設定は settings.json を使う）
+.claude/settings.local.json
