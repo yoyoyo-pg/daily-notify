@@ -118,6 +118,7 @@ git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/
 - 外部API（wttr.in、Google Calendar、Discord Webhook）はモックを使う
 - 実APIを叩くテストは書かない
 - conftest.py で環境変数のデフォルト値をセットし、Discord Webhookへの実リクエストをブロックしている
+- **ロジックを変更したときは、対応するテストも必ず同時に更新する**（テストが古い仕様のままになるのを防ぐ）
 
 ## 設計上の注意
 

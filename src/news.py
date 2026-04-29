@@ -9,7 +9,7 @@ _FEEDS = {
     "Zenn":       "https://zenn.dev/feed",
 }
 
-_ITEMS_PER_CATEGORY = 1
+_ITEMS_PER_CATEGORY = 3
 
 
 def get_news() -> dict[str, list[tuple[str, str]]]:

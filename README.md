@@ -161,7 +161,7 @@ mainへのPR作成時にはテストが自動実行される（`pytest`）。
 | セキュリティ | ITmedia Security | `https://rss.itmedia.co.jp/rss/2.0/security.xml` |
 | Zenn | Zenn トレンド | `https://zenn.dev/feed` |
 
-各カテゴリ1件ずつ取得。フィードが取得できない場合は空リストにフォールバックする。
+各カテゴリ3件ずつ取得。フィードが取得できない場合は空リストにフォールバックする。
 
 ## 開発ツールのセットアップ
 
