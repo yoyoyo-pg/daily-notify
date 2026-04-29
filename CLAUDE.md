@@ -69,15 +69,20 @@ pytest tests/test_weather.py           # 単一テスト実行
 
 ## 会話開始時の確認
 
-新しい会話が始まったら、最初に以下を実行してリポジトリの現状を把握する。
+新しい会話が始まったら、最初に以下を実行してリポジトリの現状を把握し、マージ済みのローカルブランチを掃除する。
 
 ```bash
+# 現状確認
 git log --oneline -5   # 最近のコミット・マージ済みPRの確認
 gh pr list             # 現在オープンなPR一覧
-git branch             # ローカルブランチの確認
+
+# マージ済みローカルブランチの削除
+git fetch --prune
+git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/null || true
 ```
 
-これにより、セッション内の記憶ではなく実際の状態をベースに作業できる。
+`git fetch --prune` でリモートで削除済みのブランチを追跡情報から外し、
+`git branch -d`（小文字）で未マージのブランチは残しつつマージ済みだけ削除する。
 
 ## 開発ルール
 

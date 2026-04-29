@@ -17,7 +17,9 @@
       "Bash(python *)",
       "Bash(pip install *)",
       "Bash(pytest *)",
-      "Bash(gh *)"
+      "Bash(gh *)",
+      "Bash(awk *)",
+      "Bash(xargs *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
