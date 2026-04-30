@@ -12,8 +12,8 @@ def build_embed() -> dict:
     events = get_events()
     if not events:
         return {
-            "title": "🎪 今週の名古屋・愛知イベント（Connpass）",
-            "description": "現在取得できるイベントがありません",
+            "title": "🎤 今週の名古屋・愛知イベント（Connpass）",
+            "description": "なんでイベントがないの!? WHY JAPANESE PEOPLE!?",
             "color": _COLOR,
         }
     fields = [
@@ -25,7 +25,7 @@ def build_embed() -> dict:
         for event in events
     ]
     return {
-        "title": "🎪 今週の名古屋・愛知イベント（Connpass）",
+        "title": "🎤 今週の名古屋・愛知イベント（Connpass） WHY NOT GO!?",
         "color": _COLOR,
         "fields": fields,
     }

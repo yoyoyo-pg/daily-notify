@@ -11,7 +11,7 @@ morning-notify/
 ├── .github/workflows/
 │   ├── morning-notify.yml  # 朝の通知（毎朝6時 JST）
 │   ├── evening-notify.yml  # 夜の振り返りリマインダー（毎晩21時 JST）
-│   ├── events-notify.yml   # イベントくん通知（月・木 6時 JST）
+│   ├── events-notify.yml   # 厚切りジェイソン通知（月・木 6時 JST）
 │   └── test.yml            # PRテスト（pytest）
 ├── src/                    # ショーンK
 │   ├── main.py             # 朝通知エントリーポイント。各モジュールを呼び出して通知を組み立てる
@@ -20,8 +20,8 @@ morning-notify/
 │   ├── gcalendar.py        # Google Calendar APIで当日の予定を取得（要: GOOGLE_* 環境変数）
 │   ├── news.py             # RSSフィードから日本語ニュースを取得（政治・経済・国際・AI・セキュリティ・Zenn）
 │   ├── journal.py          # Notion APIで日次ジャーナルページを作成（要: NOTION_* 環境変数）
-│   └── notifier.py         # Discord Webhookへ通知を送信（イベントくんも共用）
-├── eventkun/               # イベントくん
+│   └── notifier.py         # Discord Webhookへ通知を送信（厚切りジェイソンも共用）
+├── eventkun/               # 厚切りジェイソン
 │   ├── main.py             # エントリーポイント。embedを組み立てて送信
 │   └── events.py           # Connpass APIから愛知県の直近イベントを取得
 ├── tests/

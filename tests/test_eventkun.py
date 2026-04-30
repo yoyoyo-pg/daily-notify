@@ -123,7 +123,7 @@ def test_build_embed_with_events():
     with patch("main.get_events", return_value=events):
         embed = build_embed()
 
-    assert embed["title"] == "🎪 今週の名古屋・愛知イベント（Connpass）"
+    assert embed["title"] == "🎤 今週の名古屋・愛知イベント（Connpass） WHY NOT GO!?"
     assert "fields" in embed
     assert embed["fields"][0]["name"] == "・05/02(土) 名古屋勉強会"
     assert embed["fields"][0]["value"] == "[名古屋市中区](https://connpass.com/event/1/)"
