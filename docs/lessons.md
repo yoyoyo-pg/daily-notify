@@ -5,7 +5,29 @@
 
 ---
 
-## 2026-04-29 ワークフロー整備
+## 2026-04-30 ボット名変更・テスト自動化・ドキュメント整合性
+
+### テスト失敗の早期検知
+
+- `.claude/settings.json` の PostToolUse hook で `.py` 編集直後に `pytest` を自動実行するようにした
+- 「PR前に気づく」ではなく「編集直後に気づく」が理想。hook はその最速の手段
+- ローカル環境の `cryptography` パッケージ破損で `test_calendar.py` がコレクション時にクラッシュするため `--ignore=tests/test_calendar.py` を付けた。CI では全テストが走るので問題ない
+
+### ブランチ切り替え時に settings.json が戻る
+
+- `.claude/settings.json` は git 管理下にあるため、ブランチ切り替えで内容が変わる
+- hook を追加したブランチが main にマージされる前に別ブランチに切り替えると hook が消える。マージ後は全ブランチで使える
+
+### ボット名変更はコードとテストとドキュメントの3点セット
+
+- embed のタイトル・説明文を変えたら、それをアサートしているテストも必ず同時に変える
+- README・CLAUDE.md・docs/ の記述が「以前の名前のまま」になりやすい。grep で一括確認してから commit する
+
+### コンフリクトの原因は「同じファイルを異なるブランチで編集したこと」
+
+- PR #34（docs 修正）と PR #35（ショーンK化）が `tests/test_evening.py` を両方変更していたためコンフリクト発生
+- rebase 後は force push が必要。`settings.json` の deny リストに `git push --force*` があると弾かれるので、リベース作業前にユーザーに確認を取る
+
 
 - `settings.local.json` はコミット非推奨の仕様。プロジェクト共通の permissions は `settings.json` に書く
 - `gh pr list` はデフォルトでオープンPRのみ。`--state all` を付けないとマージ済みブランチに気づけない
