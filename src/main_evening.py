@@ -14,10 +14,10 @@ _COLOR_JOURNAL = 0x9B59B6
 def build_embed() -> tuple[str, dict]:
     now = datetime.now(_JST)
     date_str = f"{now.month}/{now.day}({_WEEKDAYS[now.weekday()]})"
-    content = f"🌙 おつかれさまです！{date_str}の振り返りをしましょう。"
+    content = f"🌙 グッドイブニング！{date_str}のリフレクション・タイムです！パッションを持って振り返りましょう！"
     embed = {
-        "title": "📓 振り返りの時間です",
-        "description": "今日のやること・やれたことを記録しましょう。",
+        "title": "📓 デイリー・リフレクション",
+        "description": "本日のアクション・アイテムとアチーブメントをレコーディングしましょう。",
         "color": _COLOR_JOURNAL,
     }
     return content, embed

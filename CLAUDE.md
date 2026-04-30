@@ -13,7 +13,7 @@ morning-notify/
 │   ├── evening-notify.yml  # 夜の振り返りリマインダー（毎晩21時 JST）
 │   ├── events-notify.yml   # イベントくん通知（月・木 6時 JST）
 │   └── test.yml            # PRテスト（pytest）
-├── src/                    # リマインくん
+├── src/                    # ショーンK
 │   ├── main.py             # 朝通知エントリーポイント。各モジュールを呼び出して通知を組み立てる
 │   ├── main_evening.py     # 夜通知エントリーポイント。振り返りリマインダーを送信する
 │   ├── weather.py          # wttr.in APIで名古屋の天気を取得

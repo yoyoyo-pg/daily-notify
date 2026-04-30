@@ -22,39 +22,39 @@ _COLOR_JOURNAL = 0x9B59B6
 def build_embeds() -> tuple[str, list[dict]]:
     now = datetime.now(_JST)
     date_str = f"{now.month}/{now.day}({_WEEKDAYS[now.weekday()]})"
-    greeting = f"☀️ おはようございます！{date_str}"
+    greeting = f"💼 グッドモーニング！{date_str}も最高のバリューを出していきましょう！"
     embeds = []
 
     try:
         w = get_weather()
         weather_embed = {
-            "title": f"🌤 名古屋の天気：{w['desc']}",
+            "title": f"🌤 名古屋のウェザーコンディション：{w['desc']}",
             "url": w["url"],
             "color": _COLOR_WEATHER,
             "fields": [
-                {"name": "🌡 気温", "value": f"{w['temp']}°C（最高 {w['temp_max']}°C / 最低 {w['temp_min']}°C）", "inline": True},
-                {"name": "☔ 降水確率", "value": f"{w['precip_prob']}%", "inline": True},
+                {"name": "🌡 テンペラチャー", "value": f"{w['temp']}°C（Max {w['temp_max']}°C / Min {w['temp_min']}°C）", "inline": True},
+                {"name": "☔ プレシピテーション", "value": f"{w['precip_prob']}%", "inline": True},
             ],
         }
     except Exception:
         weather_embed = {
-            "title": "🌤 天気情報を取得できませんでした",
+            "title": "🌤 ウェザー情報をフェッチできませんでした",
             "color": _COLOR_WEATHER,
         }
     embeds.append(weather_embed)
 
     try:
         events = get_today_events()
-        description = "\n".join(f"・{e['time']} {e['summary']}" for e in events) if events else "予定はありません"
+        description = "\n".join(f"・{e['time']} {e['summary']}" for e in events) if events else "本日はフリーなスケジュールです。ジャスト・ドゥ・イット！"
         calendar_embed = {
-            "title": "📅 今日の予定",
+            "title": "📅 本日のスケジュール・アジェンダ",
             "description": description,
             "color": _COLOR_CALENDAR,
         }
     except Exception:
         calendar_embed = {
-            "title": "📅 今日の予定",
-            "description": "予定を取得できませんでした",
+            "title": "📅 本日のスケジュール・アジェンダ",
+            "description": "スケジュールをフェッチできませんでした",
             "color": _COLOR_CALENDAR,
         }
     embeds.append(calendar_embed)
@@ -67,14 +67,14 @@ def build_embeds() -> tuple[str, list[dict]]:
             for title, link in items
         ]
         news_embed = {
-            "title": "📰 今日のニュース",
+            "title": "📰 本日のインサイトフルなニュース",
             "color": _COLOR_NEWS,
             "fields": fields,
         }
     except Exception:
         news_embed = {
-            "title": "📰 今日のニュース",
-            "description": "ニュースを取得できませんでした",
+            "title": "📰 本日のインサイトフルなニュース",
+            "description": "ニュースをフェッチできませんでした",
             "color": _COLOR_NEWS,
         }
     embeds.append(news_embed)
@@ -83,8 +83,8 @@ def build_embeds() -> tuple[str, list[dict]]:
         journal_title = f"ジャーナル {now.year}/{now.month:02d}/{now.day:02d}({_WEEKDAYS[now.weekday()]})"
         journal_url = create_journal_page(journal_title)
         embeds.append({
-            "title": "📓 今日のジャーナル",
-            "description": f"[Notionで開く →]({journal_url})",
+            "title": "📓 本日のジャーナル・セッション",
+            "description": f"[Notionでオープン →]({journal_url})",
             "color": _COLOR_JOURNAL,
             "url": journal_url,
         })
