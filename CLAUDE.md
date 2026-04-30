@@ -49,7 +49,7 @@ GitHub Actions (cron: 0 21 * * * UTC = 毎朝6時 JST)
 └── src/main.py
     ├── weather.py     → wttr.in JSON API で名古屋の天気取得（APIキー不要）
     ├── gcalendar.py   → Google Calendar API（OAuth2 refresh token 認証）
-    ├── news.py        → feedparser で日本語RSSを取得（各カテゴリ1件）
+    ├── news.py        → feedparser で日本語RSSを取得（各カテゴリ3件）
     ├── journal.py     → Notion API で日次ジャーナルページを作成（未設定時はスキップ）
     └── notifier.py    → Discord Webhook で通知送信
 ```
@@ -105,6 +105,18 @@ git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d 2>/dev/
 - **実装完了後、以下を必ず更新する**
   - `README.md` — 通知イメージ・今後の展望・各種説明が実態と合っているか確認・修正する
   - `CLAUDE.md` — リポジトリ構成・プロジェクト概要に新ファイルや変更を反映する
+
+## PR作成前チェックリスト
+
+PRを作成する前に以下を必ず確認する。
+
+```
+[ ] pytest tests/ がすべて通る
+[ ] ロジックを変えた場合、対応するテストも同時に更新した
+[ ] CLAUDE.md のリポジトリ構成・アーキテクチャ図が実装と合っている
+[ ] README.md の説明（通知イメージ・件数・スケジュール等）が実装と合っている
+[ ] 環境変数を追加・変更した場合、.env.example と CLAUDE.md の環境変数テーブルも更新した
+```
 
 ## 制約
 
