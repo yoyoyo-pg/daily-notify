@@ -23,4 +23,5 @@ jobs:
         run: python src/eventkun/main.py
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL_EVENTS: ${{ secrets.DISCORD_WEBHOOK_URL_EVENTS }}
           PYTHONPATH: src/reminkun

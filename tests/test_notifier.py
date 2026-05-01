@@ -53,3 +53,17 @@ def test_send_raises_on_http_error():
     with patch("notifier.requests.post", return_value=mock_resp):
         with pytest.raises(Exception, match="403"):
             send(_EMBEDS)
+
+
+def test_send_uses_explicit_webhook_url():
+    custom_url = "https://discord.com/api/webhooks/custom/token"
+    mock_resp = Mock()
+
+    with patch("notifier.requests.post", return_value=mock_resp) as mock_post:
+        send(_EMBEDS, webhook_url=custom_url)
+
+    mock_post.assert_called_once_with(
+        custom_url,
+        json={"embeds": _EMBEDS},
+        timeout=10,
+    )

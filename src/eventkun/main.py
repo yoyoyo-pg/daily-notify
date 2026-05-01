@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -33,4 +35,5 @@ def build_embed() -> dict:
 
 if __name__ == "__main__":
     embed = build_embed()
-    send([embed])
+    url = os.environ.get("DISCORD_WEBHOOK_URL_EVENTS") or os.environ["DISCORD_WEBHOOK_URL"]
+    send([embed], webhook_url=url)

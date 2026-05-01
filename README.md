@@ -134,7 +134,8 @@ python src/reminkun/main.py
 
 | Secret名 | 内容 |
 |----------|------|
-| `DISCORD_WEBHOOK_URL` | Discord チャンネルの設定から発行 |
+| `DISCORD_WEBHOOK_URL` | ショーンK用 Discord チャンネルの Webhook URL |
+| `DISCORD_WEBHOOK_URL_EVENTS` | 厚切りジェイソン用 Discord チャンネルの Webhook URL（未設定時は `DISCORD_WEBHOOK_URL` にフォールバック） |
 | `GOOGLE_CLIENT_ID` | Google Cloud Console で発行（Google Calendar連携時） |
 | `GOOGLE_CLIENT_SECRET` | Google Cloud Console で発行（Google Calendar連携時） |
 | `GOOGLE_REFRESH_TOKEN` | `scripts/get_token.py` で取得（Google Calendar連携時） |

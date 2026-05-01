@@ -70,7 +70,8 @@ pytest tests/test_weather.py           # 単一テスト実行
 
 | 変数名 | 用途 | 未設定時の挙動 |
 |--------|------|--------------|
-| `DISCORD_WEBHOOK_URL` | Discord Webhook URL | エラー（必須） |
+| `DISCORD_WEBHOOK_URL` | Discord Webhook URL（ショーンK用） | エラー（必須） |
+| `DISCORD_WEBHOOK_URL_EVENTS` | Discord Webhook URL（厚切りジェイソン用） | 未設定時は `DISCORD_WEBHOOK_URL` にフォールバック |
 | `GOOGLE_CLIENT_ID` | Google OAuth クライアントID | カレンダー欄が「取得できませんでした」 |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth クライアントシークレット | 同上 |
 | `GOOGLE_REFRESH_TOKEN` | Google Calendar アクセス用リフレッシュトークン | 同上 |
