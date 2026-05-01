@@ -1,7 +1,7 @@
 from unittest.mock import patch, Mock
 
 from events import get_events
-from main import build_embed
+from eventkun_main import build_embed
 
 
 def _make_response(events: list[dict]) -> Mock:
@@ -120,7 +120,7 @@ def test_build_embed_with_events():
     events = [
         {"title": "名古屋勉強会", "date": "05/02(土)", "place": "名古屋市中区", "url": "https://connpass.com/event/1/"}
     ]
-    with patch("main.get_events", return_value=events):
+    with patch("eventkun_main.get_events", return_value=events):
         embed = build_embed()
 
     assert embed["title"] == "🎤 今週の名古屋・愛知イベント（Connpass） WHY NOT GO!?"
@@ -131,7 +131,7 @@ def test_build_embed_with_events():
 
 def test_build_embed_no_events_shows_fallback():
     """イベントが0件のとき、descriptionのフォールバックを返す。"""
-    with patch("main.get_events", return_value=[]):
+    with patch("eventkun_main.get_events", return_value=[]):
         embed = build_embed()
 
     assert "description" in embed
