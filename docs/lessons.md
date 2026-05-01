@@ -34,3 +34,25 @@
 - マージ済みブランチへの追加コミットはPRに反映されない。作業前に `gh pr view` で状態確認が必須
 - 「新ファイル作成 + 複数ファイル変更」はマルチエージェントで進める基準に該当する
 - 実装後は README.md・CLAUDE.md のリポジトリ構成・説明を必ずセットで更新する
+
+---
+
+## 2026-05-01 ディレクトリ構成見直し・厚切りジェイソン別チャンネル対応・動作確認
+
+### ディレクトリ構成の見直しは PYTHONPATH への影響を必ず確認する
+
+- `src/` 直下にあったファイルを `src/reminkun/` に移動し、`eventkun/` を `src/eventkun/` に移動した
+- モジュールが別ディレクトリをまたぐ場合（eventkun が reminkun の `notifier.py` を使う等）、PYTHONPATH に複数パスを通す必要がある
+- GitHub Actions の workflow と `pytest.ini` の `pythonpath` 設定も一緒に更新しないと CI が壊れる。移動後は必ず両方確認する
+
+### ローカルでの eventkun 実行には PYTHONPATH の手動設定が必要
+
+- `python src/eventkun/main.py` をそのまま実行すると `notifier` が見つからずエラーになる
+- `PYTHONPATH="...src/reminkun;...src/eventkun" python src/eventkun/main.py` のように絶対パスで設定する必要がある（Windows では `;` 区切り）
+- GitHub Actions 側は `PYTHONPATH: src/reminkun` が設定済みなので本番は問題ない。ローカルでの動作確認時に忘れやすいので注意
+
+### 別 Webhook URL へのフォールバックパターン
+
+- 厚切りジェイソン専用の `DISCORD_WEBHOOK_URL_EVENTS` が未設定の場合は `DISCORD_WEBHOOK_URL` にフォールバックする設計にした
+- `notifier.send()` に `webhook_url` 引数を追加し、呼び出し側（eventkun/main.py）で解決することで notifier 側をシンプルに保てた
+- 新しい Webhook URL 変数を追加したときは `.env.example`・`CLAUDE.md` の環境変数テーブル・workflow の `env:` ブロックの3点セットを必ず更新する
