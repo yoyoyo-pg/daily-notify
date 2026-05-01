@@ -16,8 +16,16 @@ echo ""
 echo "### PR一覧（直近10件）"
 gh pr list --state all --limit 10 2>/dev/null
 echo ""
-echo "### マージ済みローカルブランチのクリーンアップ"
+echo "### リモートと同期"
 git fetch --prune -q 2>/dev/null
+CURRENT=$(git branch --show-current 2>/dev/null)
+if [ "$CURRENT" = "main" ]; then
+  git pull -q 2>/dev/null && echo "main を pull しました"
+else
+  git fetch origin main:main -q 2>/dev/null && echo "ローカル main を更新しました（現在: $CURRENT）"
+fi
+echo ""
+echo "### マージ済みローカルブランチのクリーンアップ"
 GONE=$(git branch -vv 2>/dev/null | grep ': gone]' | awk '{print $1}')
 if [ -n "$GONE" ]; then
   echo "$GONE" | xargs git branch -d 2>/dev/null && echo "削除しました: $GONE"
