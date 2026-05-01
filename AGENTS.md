@@ -2,20 +2,34 @@
 
 ## プロジェクト概要
 
-毎朝7時(JST)に天気・Googleカレンダー・ニュースをDiscordへ通知するPythonスクリプト。GitHub Actionsで定期実行する。
+毎朝6時(JST)に天気・Googleカレンダー・ニュースをDiscordへ通知し、毎晩21時(JST)に振り返りリマインダーを送るPythonスクリプト。GitHub Actionsで定期実行する。
 
 ## リポジトリ構成
 
 ```
-morning-notify/
-├── .github/workflows/morning-notify.yml   # スケジュール実行定義
-├── src/reminkun/
-│   ├── main.py          # エントリーポイント。各モジュールを呼び出して通知を組み立てる
-│   ├── weather.py       # wttr.in APIで名古屋の天気を取得
-│   ├── gcalendar.py     # Google Calendar APIで当日の予定を取得
-│   ├── news.py          # RSSフィードから日本語ニュースを取得
-│   └── notifier.py      # Discordへ通知を送信
+daily-notify/
+├── .github/workflows/
+│   ├── morning-notify.yml  # 朝通知（毎朝6時 JST = UTC 21:00）
+│   ├── evening-notify.yml  # 夜通知（毎晩21時 JST = UTC 12:00）
+│   ├── events-notify.yml   # イベント通知（月・木 6時 JST）
+│   └── test.yml            # PRテスト（pytest）
+├── src/
+│   ├── reminkun/           # ショーンK（朝・夜通知）
+│   │   ├── main.py
+│   │   ├── main_evening.py
+│   │   ├── weather.py
+│   │   ├── gcalendar.py
+│   │   ├── news.py
+│   │   ├── journal.py
+│   │   └── notifier.py
+│   └── eventkun/           # 厚切りジェイソン（イベント通知）
+│       ├── eventkun_main.py
+│       └── events.py
 ├── tests/
+├── docs/
+├── scripts/
+│   └── get_token.py        # Google OAuth token 取得ユーティリティ
+├── pytest.ini
 ├── requirements.txt
 └── .env.example
 ```
@@ -23,26 +37,25 @@ morning-notify/
 ## 技術スタック
 
 - **言語**: Python 3.11+
-- **天気**: [wttr.in](https://wttr.in) JSON API（APIキー不要）
-- **カレンダー**: `google-api-python-client`
-- **ニュース**: `feedparser` + 日本語RSSフィード
-- **通知**: Discord Webhook（`requests`ライブラリ）
+- **天気**: wttr.in JSON API（APIキー不要）
+- **カレンダー**: google-api-python-client（OAuth2 refresh token 認証）
+- **ニュース**: feedparser + 日本語RSSフィード
+- **通知**: Discord Webhook（requests）
+- **ジャーナル**: Notion API（notion-client）
 - **CI/CD**: GitHub Actions
 
 ## コマンド
 
 ```bash
-pip install -r requirements.txt   # 依存インストール
-python src/reminkun/main.py                # ローカル実行
-pytest tests/                     # テスト実行
+pip install -r requirements.txt
+python src/reminkun/main.py
+pytest tests/
 ```
 
 ## 制約
 
 - 認証情報をコードにハードコードしない（必ず環境変数から読む）
-- 既存のモジュール構成（weather / gcalendar / news / journal / notifier）を理由なく変えない
+- 既存のモジュール構成を理由なく変えない
 - 新しい外部APIを勝手に追加しない
-- Google Calendar認証は非対話型（refresh token方式）のみ使用する
-- GitHub Actions の cron はUTC基準: `0 22 * * *` = JST 7:00
+- Google Calendar認証は非対話型のみ（refresh token方式）
 - テストは外部APIをモックして書く（実APIは叩かない）
-- ニュースRSSは取得できない場合のフォールバックを必ず設けること
