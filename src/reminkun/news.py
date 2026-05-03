@@ -1,7 +1,7 @@
 import feedparser
 
 _FEEDS = {
-    "政治":       "https://news.yahoo.co.jp/rss/topics/politics.xml",
+    "政治":       "https://news.yahoo.co.jp/rss/categories/domestic.xml",
     "経済":       "https://news.yahoo.co.jp/rss/topics/business.xml",
     "国際":       "https://news.yahoo.co.jp/rss/topics/world.xml",
     "AI":         "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml",
