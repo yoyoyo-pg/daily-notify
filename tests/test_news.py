@@ -11,7 +11,7 @@ def _make_feed(titles: list[str]) -> MagicMock:
 
 def test_get_news_returns_three_per_category():
     feeds = [
-        _make_feed(["政治1", "政治2", "政治3", "政治4"]),
+        _make_feed(["国内1", "国内2", "国内3", "国内4"]),
         _make_feed(["経済1", "経済2", "経済3", "経済4"]),
         _make_feed(["国際1", "国際2", "国際3", "国際4"]),
         _make_feed(["AI1", "AI2", "AI3", "AI4"]),
@@ -22,10 +22,10 @@ def test_get_news_returns_three_per_category():
     with patch("news.feedparser.parse", side_effect=feeds):
         result = get_news()
 
-    assert result["政治"] == [
-        ("政治1", "https://example.com/政治1"),
-        ("政治2", "https://example.com/政治2"),
-        ("政治3", "https://example.com/政治3"),
+    assert result["国内"] == [
+        ("国内1", "https://example.com/国内1"),
+        ("国内2", "https://example.com/国内2"),
+        ("国内3", "https://example.com/国内3"),
     ]
     for category in ["経済", "国際", "AI", "セキュリティ", "Zenn"]:
         assert len(result[category]) == 3
@@ -45,6 +45,6 @@ def test_get_news_fallback_on_error():
     with patch("news.feedparser.parse", side_effect=Exception("feed error")):
         result = get_news()
 
-    assert set(result.keys()) == {"政治", "経済", "国際", "AI", "セキュリティ", "Zenn"}
+    assert set(result.keys()) == {"国内", "経済", "国際", "AI", "セキュリティ", "Zenn"}
     for items in result.values():
         assert items == []
