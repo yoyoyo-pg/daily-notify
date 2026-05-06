@@ -59,10 +59,12 @@ def test_build_embed_with_articles():
         embed = build_embed()
 
     assert embed["title"] == "🐟 ギョギョ！今日の技術トレンドだよ〜！"
-    assert "4件" in embed["description"]
-    assert len(embed["fields"]) == 4
-    assert embed["fields"][0]["name"] == "[Zenn] Zenn記事1"
-    assert embed["fields"][2]["name"] == "[Qiita] Qiita記事1"
+    assert "description" not in embed
+    assert len(embed["fields"]) == 2
+    assert embed["fields"][0]["name"] == "Zenn"
+    assert "Zenn記事1" in embed["fields"][0]["value"]
+    assert "Zenn記事2" in embed["fields"][0]["value"]
+    assert embed["fields"][1]["name"] == "Qiita"
 
 
 def test_build_embed_no_articles_shows_fallback():
@@ -82,4 +84,4 @@ def test_build_embed_partial_source():
         embed = build_embed()
 
     assert len(embed["fields"]) == 1
-    assert "1件" in embed["description"]
+    assert embed["fields"][0]["name"] == "Zenn"

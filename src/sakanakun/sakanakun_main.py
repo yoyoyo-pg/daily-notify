@@ -30,8 +30,9 @@ def build_embed() -> dict:
     articles = get_articles()
     fields = []
     for source, items in articles.items():
-        for title, url in items:
-            fields.append({"name": f"[{source}] {title}", "value": url, "inline": False})
+        if items:
+            value = "\n".join(f"・[{title}]({url})" for title, url in items)
+            fields.append({"name": source, "value": value, "inline": False})
 
     if not fields:
         return {
@@ -39,10 +40,8 @@ def build_embed() -> dict:
             "description": "ギョ…今日は記事が取れなかったギョ…！🐡",
             "color": _COLOR,
         }
-    total = sum(len(v) for v in articles.values())
     return {
         "title": "🐟 ギョギョ！今日の技術トレンドだよ〜！",
-        "description": f"【Zenn・Qiitaより{total}件ギョ！】",
         "color": _COLOR,
         "fields": fields,
     }
