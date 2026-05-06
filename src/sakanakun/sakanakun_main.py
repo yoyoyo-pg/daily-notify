@@ -7,34 +7,42 @@ load_dotenv()
 
 from notifier import send
 
-_ZENN_FEED = "https://zenn.dev/feed"
-_ITEMS = 3
+_FEEDS = {
+    "Zenn":  "https://zenn.dev/feed",
+    "Qiita": "https://qiita.com/popular-items/feed.atom",
+}
+_ITEMS_PER_SOURCE = 2
 _COLOR = 0x00BCD4  # 水色
 
 
-def get_zenn_articles() -> list[tuple[str, str]]:
-    try:
-        feed = feedparser.parse(_ZENN_FEED)
-        return [(e.title, e.link) for e in feed.entries[:_ITEMS]]
-    except Exception:
-        return []
+def get_articles() -> dict[str, list[tuple[str, str]]]:
+    result = {}
+    for source, url in _FEEDS.items():
+        try:
+            feed = feedparser.parse(url)
+            result[source] = [(e.title, e.link) for e in feed.entries[:_ITEMS_PER_SOURCE]]
+        except Exception:
+            result[source] = []
+    return result
 
 
 def build_embed() -> dict:
-    articles = get_zenn_articles()
-    if not articles:
+    articles = get_articles()
+    fields = []
+    for source, items in articles.items():
+        for title, url in items:
+            fields.append({"name": f"[{source}] {title}", "value": url, "inline": False})
+
+    if not fields:
         return {
             "title": "🐟 ギョギョ！今日の技術ニュースだよ〜！",
-            "description": "ギョ…今日はZennの記事が取れなかったギョ…！🐡",
+            "description": "ギョ…今日は記事が取れなかったギョ…！🐡",
             "color": _COLOR,
         }
-    fields = [
-        {"name": f"・{title}", "value": url, "inline": False}
-        for title, url in articles
-    ]
+    total = sum(len(v) for v in articles.values())
     return {
         "title": "🐟 ギョギョ！今日の技術トレンドだよ〜！",
-        "description": f"【Zennより{len(articles)}件ギョ！】",
+        "description": f"【Zenn・Qiitaより{total}件ギョ！】",
         "color": _COLOR,
         "fields": fields,
     }
