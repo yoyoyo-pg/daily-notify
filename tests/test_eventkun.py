@@ -2,6 +2,7 @@ from unittest.mock import patch, Mock
 
 from events import get_events
 from eventkun_main import build_embed
+from nagoya_news import get_nagoya_news
 
 
 def _make_response(events: list[dict]) -> Mock:
@@ -115,12 +116,20 @@ def test_get_events_empty_response():
     assert result == []
 
 
+_EMPTY_NEWS = {"名古屋情報通": [], "久屋大通パーク": []}
+_SAMPLE_NEWS = {
+    "名古屋情報通": [("新店オープン", "https://jouhou.nagoya/1"), ("イベント情報", "https://jouhou.nagoya/2")],
+    "久屋大通パーク": [("マルシェ開催", "https://hisayaodoripark.com/1")],
+}
+
+
 def test_build_embed_with_events():
-    """イベントがあるとき、fieldsを持つembedを返す。"""
+    """イベントがあるとき、Connpassイベントのfieldsを持つembedを返す。"""
     events = [
         {"title": "名古屋勉強会", "date": "05/02(土)", "place": "名古屋市中区", "url": "https://connpass.com/event/1/"}
     ]
-    with patch("eventkun_main.get_events", return_value=events):
+    with patch("eventkun_main.get_events", return_value=events), \
+         patch("eventkun_main.get_nagoya_news", return_value=_EMPTY_NEWS):
         embed = build_embed()
 
     assert embed["title"] == "🎤 今週の名古屋・愛知イベント（Connpass） WHY NOT GO!?"
@@ -130,9 +139,64 @@ def test_build_embed_with_events():
 
 
 def test_build_embed_no_events_shows_fallback():
-    """イベントが0件のとき、descriptionのフォールバックを返す。"""
-    with patch("eventkun_main.get_events", return_value=[]):
+    """イベントもニュースも0件のとき、descriptionのフォールバックを返す。"""
+    with patch("eventkun_main.get_events", return_value=[]), \
+         patch("eventkun_main.get_nagoya_news", return_value=_EMPTY_NEWS):
         embed = build_embed()
 
     assert "description" in embed
     assert "fields" not in embed
+
+
+def test_build_embed_includes_news_fields():
+    """ニュースがあるとき、イベントfieldsの後にニュースfieldsが追加される。"""
+    events = [
+        {"title": "名古屋勉強会", "date": "05/02(土)", "place": "名古屋市中区", "url": "https://connpass.com/event/1/"}
+    ]
+    with patch("eventkun_main.get_events", return_value=events), \
+         patch("eventkun_main.get_nagoya_news", return_value=_SAMPLE_NEWS):
+        embed = build_embed()
+
+    field_names = [f["name"] for f in embed["fields"]]
+    assert "・05/02(土) 名古屋勉強会" in field_names
+    assert "名古屋情報通" in field_names
+    assert "久屋大通パーク" in field_names
+
+
+def test_build_embed_news_only_when_no_events():
+    """Connpassイベントがなくてもニュースがあれば表示する。"""
+    with patch("eventkun_main.get_events", return_value=[]), \
+         patch("eventkun_main.get_nagoya_news", return_value=_SAMPLE_NEWS):
+        embed = build_embed()
+
+    assert "fields" in embed
+    assert "description" not in embed
+    field_names = [f["name"] for f in embed["fields"]]
+    assert "名古屋情報通" in field_names
+
+
+def test_get_nagoya_news_returns_both_sources():
+    """正常なフィードから2ソース分の記事を返す。"""
+    from unittest.mock import Mock
+    def _make_feed(titles):
+        m = Mock()
+        m.entries = [Mock(title=t, link=f"https://example.com/{t}") for t in titles]
+        return m
+
+    feeds = [_make_feed(["記事A", "記事B", "記事C", "記事D"]), _make_feed(["記事X", "記事Y"])]
+    with patch("nagoya_news.feedparser.parse", side_effect=feeds):
+        result = get_nagoya_news()
+
+    assert "名古屋情報通" in result
+    assert "久屋大通パーク" in result
+    assert len(result["名古屋情報通"]) == 3
+    assert len(result["久屋大通パーク"]) == 2
+
+
+def test_get_nagoya_news_returns_empty_on_failure():
+    """フィード取得失敗時は空リストを返す。"""
+    with patch("nagoya_news.feedparser.parse", side_effect=Exception("error")):
+        result = get_nagoya_news()
+
+    assert result["名古屋情報通"] == []
+    assert result["久屋大通パーク"] == []
