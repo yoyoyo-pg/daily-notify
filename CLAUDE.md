@@ -12,6 +12,7 @@
 | `pip install -r requirements.txt` | 依存インストール |
 | `python src/reminkun/main.py` | 朝通知ローカル実行 |
 | `python src/eventkun/eventkun_main.py` | イベント通知ローカル実行 |
+| `python src/sakanakun/sakanakun_main.py` | 技術ニュース通知ローカル実行 |
 | `pytest tests/` | テスト実行 |
 
 ## ディレクトリ構造
@@ -19,6 +20,7 @@
 |-----|------|
 | `src/reminkun/` | ショーンK（朝・夜通知） |
 | `src/eventkun/` | 厚切りジェイソン（イベント通知） |
+| `src/sakanakun/` | さかなクン（Zenn技術ニュース通知） |
 | `tests/` | pytest テスト（pytest.ini で src/ 以下が PATH に追加済み） |
 | `.github/workflows/` | GitHub Actions（morning/evening/events/test） |
 | `.claude/rules/` | 詳細ルール（コンテキスト注入） |

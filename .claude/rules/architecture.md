@@ -17,6 +17,7 @@ paths: src/**/*.py
 | `reminkun/notifier.py` | Discord Webhook 送信（eventkun も共用。`webhook_url` 引数で切り替え可） |
 | `eventkun/eventkun_main.py` | イベント通知エントリーポイント（embed を組み立てて送信） |
 | `eventkun/events.py` | Connpass API で愛知県の直近イベント取得 |
+| `sakanakun/sakanakun_main.py` | Zenn技術ニュース通知エントリーポイント（毎日 6:00 JST、別チャンネル） |
 
 ## 環境変数
 
@@ -24,6 +25,7 @@ paths: src/**/*.py
 |--------|--------------|
 | `DISCORD_WEBHOOK_URL` | エラー（必須） |
 | `DISCORD_WEBHOOK_URL_EVENTS` | `DISCORD_WEBHOOK_URL` にフォールバック |
+| `DISCORD_WEBHOOK_URL_SAKANAKUN` | `DISCORD_WEBHOOK_URL` にフォールバック |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` / `GOOGLE_REFRESH_TOKEN` | カレンダー欄が「取得できませんでした」 |
 | `NOTION_API_KEY` / `NOTION_PARENT_PAGE_ID` | ジャーナル欄をスキップ |
 

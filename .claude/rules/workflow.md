@@ -18,6 +18,8 @@ paths: src/**/*.py,tests/**/*.py,.github/workflows/*.yml
 [ ] ロジックを変えた場合、対応するテストも同時に更新した
 [ ] CLAUDE.md のディレクトリ構造が実装と合っている
 [ ] README.md の説明が実装と合っている
+[ ] AGENTS.md のリポジトリ構成が実装と合っている
+[ ] ボット追加・変更の場合、docs/ideas.md の稼働中メンバー表と実装優先度表を更新した
 [ ] 環境変数を追加・変更した場合、.env.example と architecture.md の環境変数テーブルも更新した
 ```
 

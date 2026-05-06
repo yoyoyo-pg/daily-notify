@@ -9,10 +9,11 @@
 ```
 daily-notify/
 ├── .github/workflows/
-│   ├── morning-notify.yml  # 朝通知（毎朝6時 JST = UTC 21:00）
-│   ├── evening-notify.yml  # 夜通知（毎晩21時 JST = UTC 12:00）
-│   ├── events-notify.yml   # イベント通知（月・木 6時 JST）
-│   └── test.yml            # PRテスト（pytest）
+│   ├── morning-notify.yml    # 朝通知（毎朝6時 JST = UTC 21:00）
+│   ├── evening-notify.yml    # 夜通知（毎晩21時 JST = UTC 12:00）
+│   ├── events-notify.yml     # イベント通知（月・木 6時 JST）
+│   ├── sakanakun-notify.yml  # 技術ニュース通知（毎日6時 JST）
+│   └── test.yml              # PRテスト（pytest）
 ├── src/
 │   ├── reminkun/           # ショーンK（朝・夜通知）
 │   │   ├── main.py
@@ -22,9 +23,11 @@ daily-notify/
 │   │   ├── news.py
 │   │   ├── journal.py
 │   │   └── notifier.py
-│   └── eventkun/           # 厚切りジェイソン（イベント通知）
-│       ├── eventkun_main.py
-│       └── events.py
+│   ├── eventkun/           # 厚切りジェイソン（イベント通知）
+│   │   ├── eventkun_main.py
+│   │   └── events.py
+│   └── sakanakun/          # さかなクン（Zenn技術ニュース通知）
+│       └── sakanakun_main.py
 ├── tests/
 ├── docs/
 ├── scripts/
