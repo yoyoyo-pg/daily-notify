@@ -6,7 +6,6 @@ _FEEDS = {
     "国際":       "https://news.yahoo.co.jp/rss/topics/world.xml",
     "AI":         "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml",
     "セキュリティ": "https://rss.itmedia.co.jp/rss/2.0/security.xml",
-    "Zenn":       "https://zenn.dev/feed",
 }
 
 _ITEMS_PER_CATEGORY = 3
