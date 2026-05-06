@@ -1,3 +1,6 @@
+import re
+from datetime import datetime, timezone, timedelta
+
 import feedparser
 
 _FEEDS = {
@@ -5,6 +8,27 @@ _FEEDS = {
     "久屋大通パーク":   "https://www.hisayaodoripark.com/feed",
 }
 _ITEMS_PER_SOURCE = 3
+_JST = timezone(timedelta(hours=9))
+_DATE_PATTERN = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
+
+
+def _latest_date(text: str) -> datetime | None:
+    """テキスト中の日本語日付を抽出し、最も遅い日付を返す。"""
+    dates = []
+    for year, month, day in _DATE_PATTERN.findall(text):
+        try:
+            dates.append(datetime(int(year), int(month), int(day), tzinfo=_JST))
+        except ValueError:
+            pass
+    return max(dates) if dates else None
+
+
+def _is_upcoming(entry) -> bool:
+    """過去イベントを除外する。日付が見つからない場合は表示する。"""
+    today = datetime.now(_JST).replace(hour=0, minute=0, second=0, microsecond=0)
+    text = f"{entry.title} {getattr(entry, 'summary', '')}"
+    latest = _latest_date(text)
+    return latest is None or latest >= today
 
 
 def get_nagoya_news() -> dict[str, list[tuple[str, str]]]:
@@ -12,7 +36,12 @@ def get_nagoya_news() -> dict[str, list[tuple[str, str]]]:
     for source, url in _FEEDS.items():
         try:
             feed = feedparser.parse(url)
-            result[source] = [(e.title, e.link) for e in feed.entries[:_ITEMS_PER_SOURCE]]
+            items = [
+                (e.title, e.link)
+                for e in feed.entries
+                if _is_upcoming(e)
+            ]
+            result[source] = items[:_ITEMS_PER_SOURCE]
         except Exception:
             result[source] = []
     return result
