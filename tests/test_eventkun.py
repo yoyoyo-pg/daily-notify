@@ -175,22 +175,50 @@ def test_build_embed_news_only_when_no_events():
     assert "名古屋情報通" in field_names
 
 
-def test_get_nagoya_news_returns_both_sources():
-    """正常なフィードから2ソース分の記事を返す。"""
-    from unittest.mock import Mock
-    def _make_feed(titles):
-        m = Mock()
-        m.entries = [Mock(title=t, link=f"https://example.com/{t}") for t in titles]
-        return m
+def _make_news_feed(entries: list[dict]) -> Mock:
+    feed = Mock()
+    feed.entries = [Mock(title=e["title"], link=e["link"], summary=e.get("summary", "")) for e in entries]
+    return feed
 
-    feeds = [_make_feed(["記事A", "記事B", "記事C", "記事D"]), _make_feed(["記事X", "記事Y"])]
+
+def test_get_nagoya_news_returns_both_sources():
+    """日付なし記事はそのまま返す（名古屋情報通のような一般ニュース想定）。"""
+    entries = [{"title": f"記事{i}", "link": f"https://example.com/{i}"} for i in range(4)]
+    feeds = [_make_news_feed(entries), _make_news_feed(entries[:2])]
     with patch("nagoya_news.feedparser.parse", side_effect=feeds):
         result = get_nagoya_news()
 
-    assert "名古屋情報通" in result
-    assert "久屋大通パーク" in result
     assert len(result["名古屋情報通"]) == 3
     assert len(result["久屋大通パーク"]) == 2
+
+
+def test_get_nagoya_news_filters_past_events():
+    """過去の日付を含むタイトルの記事は除外される。"""
+    entries = [
+        {"title": "2020年1月1日（水）のイベント", "link": "https://example.com/past"},
+        {"title": "日付なし記事", "link": "https://example.com/no-date"},
+        {"title": "2099年12月31日（火）の未来イベント", "link": "https://example.com/future"},
+    ]
+    feeds = [_make_news_feed(entries), _make_news_feed([])]
+    with patch("nagoya_news.feedparser.parse", side_effect=feeds):
+        result = get_nagoya_news()
+
+    titles = [t for t, _ in result["名古屋情報通"]]
+    assert "2020年1月1日（水）のイベント" not in titles
+    assert "日付なし記事" in titles
+    assert "2099年12月31日（火）の未来イベント" in titles
+
+
+def test_get_nagoya_news_uses_latest_date_in_range():
+    """期間イベントは終了日で判定する（終了日が未来なら表示）。"""
+    entries = [
+        {"title": "2020年4月1日〜2099年12月31日のロングイベント", "link": "https://example.com/long"},
+    ]
+    feeds = [_make_news_feed(entries), _make_news_feed([])]
+    with patch("nagoya_news.feedparser.parse", side_effect=feeds):
+        result = get_nagoya_news()
+
+    assert len(result["名古屋情報通"]) == 1
 
 
 def test_get_nagoya_news_returns_empty_on_failure():
