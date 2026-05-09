@@ -1,7 +1,3 @@
----
-paths: src/**/*.py,tests/**/*.py,.github/workflows/*.yml
----
-
 # 開発ワークフロー
 
 ## ブランチ・PR
