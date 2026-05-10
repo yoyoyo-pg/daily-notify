@@ -7,9 +7,25 @@
 - GitHub MCP ツール（`mcp__github__*`）を使う（`gh` CLI は使用不可）
 - 既存ブランチで作業を続ける前に PR の状態を確認する（マージ済みなら新ブランチを切る）
 
+## コンフリクト防止ルール
+
+ブランチが長生きすると main との乖離が大きくなりコンフリクトが起きやすい。以下を必ず守る。
+
+1. **PR 作成直前に必ず rebase する**
+   ```bash
+   git fetch origin main
+   git rebase origin/main
+   # push --force-with-lease はユーザーに確認を取ってから実行する
+   # （settings.json の deny リストに git push --force* があるため）
+   ```
+2. **1ブランチ = 1タスク**。複数機能を同じブランチに詰め込まない。
+3. **ブランチ寿命は原則 1 セッション以内**。跨ぐ場合は冒頭で `git fetch origin main && git log --oneline origin/main..HEAD` でズレを確認する。
+4. **docs 系ファイル（README.md・CLAUDE.md・AGENTS.md・ideas.md）は特に競合しやすい**。実装ブランチでは必要最小限の docs 更新に留め、main への追従を早める。
+
 ## PR作成前チェックリスト
 
 ```
+[ ] git fetch origin main && git rebase origin/main 済み（コンフリクト防止）
 [ ] pytest tests/ がすべて通る
 [ ] ロジックを変えた場合、対応するテストも同時に更新した
 [ ] CLAUDE.md のディレクトリ構造が実装と合っている
