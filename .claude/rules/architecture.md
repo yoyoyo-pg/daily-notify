@@ -15,8 +15,8 @@ paths: src/**/*.py
 | `reminkun/news.py` | feedparser で日本語RSS取得（政治・経済・国際・AI・セキュリティ・Zenn、各カテゴリ3件） |
 | `reminkun/journal.py` | Notion API で日次ジャーナルページ作成 |
 | `reminkun/notifier.py` | Discord Webhook 送信（eventkun も共用。`webhook_url` 引数で切り替え可） |
-| `eventkun/eventkun_main.py` | イベント通知エントリーポイント（embed を組み立てて送信） |
-| `eventkun/events.py` | Connpass API で愛知県の直近イベント取得 |
+| `eventkun/eventkun_main.py` | 厚切りジェイソン通知エントリーポイント（名古屋ローカルニュースを embed で送信） |
+| `eventkun/nagoya_news.py` | feedparser で名古屋ローカルニュースを取得（名古屋情報通・久屋大通パーク） |
 | `sakanakun/sakanakun_main.py` | Zenn技術ニュース通知エントリーポイント（毎日 6:00 JST、別チャンネル） |
 
 ## 環境変数
