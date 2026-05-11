@@ -19,14 +19,6 @@ def _to_do() -> dict:
     }
 
 
-def _paragraph() -> dict:
-    return {
-        "object": "block",
-        "type": "paragraph",
-        "paragraph": {"rich_text": []},
-    }
-
-
 def create_journal_page(title: str) -> str:
     """Notionに日次ジャーナルページを作成してURLを返す。"""
     notion = Client(auth=os.environ["NOTION_API_KEY"])
@@ -38,18 +30,15 @@ def create_journal_page(title: str) -> str:
             "title": [{"type": "text", "text": {"content": title}}],
         },
         children=[
-            _heading_2("やること"),
+            _heading_2("今日やったこと"),
             _to_do(),
             _to_do(),
             _to_do(),
             {"object": "block", "type": "divider", "divider": {}},
-            _heading_2("やれたこと"),
+            _heading_2("明日やること"),
             _to_do(),
             _to_do(),
             _to_do(),
-            {"object": "block", "type": "divider", "divider": {}},
-            _heading_2("メモ"),
-            _paragraph(),
         ],
     )
 
