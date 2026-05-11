@@ -40,7 +40,7 @@ def test_create_journal_page_has_todo_blocks():
 
     children = mock.pages.create.call_args[1]["children"]
     todo_blocks = [b for b in children if b["type"] == "to_do"]
-    assert len(todo_blocks) == 6
+    assert len(todo_blocks) == 6  # 今日やったこと3 + 明日やること3
     assert all(not b["to_do"]["checked"] for b in todo_blocks)
 
 
@@ -54,9 +54,8 @@ def test_create_journal_page_has_sections():
         b["heading_2"]["rich_text"][0]["text"]["content"]
         for b in children if b["type"] == "heading_2"
     ]
-    assert "やること" in headings
-    assert "やれたこと" in headings
-    assert "メモ" in headings
+    assert "今日やったこと" in headings
+    assert "明日やること" in headings
 
 
 def test_create_journal_page_sets_parent_id():
