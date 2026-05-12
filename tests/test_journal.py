@@ -56,6 +56,7 @@ def test_create_journal_page_has_sections():
     ]
     assert "今日やったこと" in headings
     assert "明日やること" in headings
+    assert "メモ" in headings
 
 
 def test_create_journal_page_sets_parent_id():
