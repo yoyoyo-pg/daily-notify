@@ -19,6 +19,14 @@ def _to_do() -> dict:
     }
 
 
+def _paragraph() -> dict:
+    return {
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {"rich_text": []},
+    }
+
+
 def create_journal_page(title: str) -> str:
     """Notionに日次ジャーナルページを作成してURLを返す。"""
     notion = Client(auth=os.environ["NOTION_API_KEY"])
@@ -39,6 +47,9 @@ def create_journal_page(title: str) -> str:
             _to_do(),
             _to_do(),
             _to_do(),
+            {"object": "block", "type": "divider", "divider": {}},
+            _heading_2("メモ"),
+            _paragraph(),
         ],
     )
 
