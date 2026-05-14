@@ -1,8 +1,8 @@
+import time
 from unittest.mock import patch, Mock
 
 from eventkun_main import build_embed
 from nagoya_news import get_nagoya_news
-
 
 _EMPTY_NEWS = {"名古屋情報通": [], "久屋大通パーク": []}
 _SAMPLE_NEWS = {
@@ -10,12 +10,30 @@ _SAMPLE_NEWS = {
     "久屋大通パーク": [("マルシェ開催", "https://hisayaodoripark.com/1")],
 }
 
+# published_parsed は feedparser が返す time.struct_time 形式
+_RECENT = time.strptime("2026-05-01", "%Y-%m-%d")   # 今日に近い日付
+_OLD    = time.strptime("2020-01-01", "%Y-%m-%d")   # 60日超の古い日付
+
+
+def _make_entry(title: str, link: str, summary: str = "", published_parsed=None) -> Mock:
+    return Mock(title=title, link=link, summary=summary, published_parsed=published_parsed)
+
 
 def _make_news_feed(entries: list[dict]) -> Mock:
     feed = Mock()
-    feed.entries = [Mock(title=e["title"], link=e["link"], summary=e.get("summary", "")) for e in entries]
+    feed.entries = [
+        _make_entry(
+            title=e["title"],
+            link=e["link"],
+            summary=e.get("summary", ""),
+            published_parsed=e.get("published_parsed", None),
+        )
+        for e in entries
+    ]
     return feed
 
+
+# ── build_embed ────────────────────────────────────────────────
 
 def test_build_embed_with_news():
     """ニュースがあるとき、fieldsを持つembedを返す。"""
@@ -38,8 +56,10 @@ def test_build_embed_no_news_shows_fallback():
     assert "fields" not in embed
 
 
+# ── get_nagoya_news ────────────────────────────────────────────
+
 def test_get_nagoya_news_returns_both_sources():
-    """日付なし記事はそのまま返す（名古屋情報通のような一般ニュース想定）。"""
+    """published_parsed なし記事（日付不明）はそのまま返す。"""
     entries = [{"title": f"記事{i}", "link": f"https://example.com/{i}"} for i in range(4)]
     feeds = [_make_news_feed(entries), _make_news_feed(entries[:2])]
     with patch("nagoya_news.feedparser.parse", side_effect=feeds):
@@ -76,6 +96,47 @@ def test_get_nagoya_news_uses_latest_date_in_range():
         result = get_nagoya_news()
 
     assert len(result["名古屋情報通"]) == 1
+
+
+def test_get_nagoya_news_filters_old_rss_entries():
+    """RSS掲載日が60日超の記事は除外される。"""
+    entries = [
+        {"title": "古い記事", "link": "https://example.com/old", "published_parsed": _OLD},
+        {"title": "新しい記事", "link": "https://example.com/new", "published_parsed": _RECENT},
+    ]
+    feeds = [_make_news_feed(entries), _make_news_feed([])]
+    with patch("nagoya_news.feedparser.parse", side_effect=feeds):
+        result = get_nagoya_news()
+
+    titles = [t for t, _ in result["名古屋情報通"]]
+    assert "古い記事" not in titles
+    assert "新しい記事" in titles
+
+
+def test_get_nagoya_news_no_published_date_not_filtered():
+    """published_parsed が None の記事は古さフィルタを通過する。"""
+    entries = [
+        {"title": "日付不明記事", "link": "https://example.com/unknown", "published_parsed": None},
+    ]
+    feeds = [_make_news_feed(entries), _make_news_feed([])]
+    with patch("nagoya_news.feedparser.parse", side_effect=feeds):
+        result = get_nagoya_news()
+
+    assert len(result["名古屋情報通"]) == 1
+
+
+def test_get_nagoya_news_sorted_by_published_newest_first():
+    """RSS掲載日が新しい順に並ぶ。"""
+    entries = [
+        {"title": "古い記事", "link": "https://example.com/old", "published_parsed": _OLD},
+        {"title": "新しい記事", "link": "https://example.com/new", "published_parsed": _RECENT},
+    ]
+    feeds = [_make_news_feed(entries), _make_news_feed([])]
+    with patch("nagoya_news.feedparser.parse", side_effect=feeds):
+        result = get_nagoya_news()
+
+    # 古い記事は60日フィルタで除外されるため、新しい記事のみ
+    assert result["名古屋情報通"][0][0] == "新しい記事"
 
 
 def test_get_nagoya_news_returns_empty_on_failure():

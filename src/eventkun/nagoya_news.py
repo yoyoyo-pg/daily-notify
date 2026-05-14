@@ -8,6 +8,7 @@ _FEEDS = {
     "久屋大通パーク":   "https://www.hisayaodoripark.com/feed",
 }
 _ITEMS_PER_SOURCE = 3
+_MAX_AGE_DAYS = 60  # RSS掲載日がこれより古いエントリは除外
 _JST = timezone(timedelta(hours=9))
 _DATE_PATTERN = re.compile(r"(\d{4})年(\d{1,2})月(\d{1,2})日")
 
@@ -31,15 +32,34 @@ def _is_upcoming(entry) -> bool:
     return latest is None or latest >= today
 
 
+def _published_dt(entry) -> datetime:
+    """RSSのpublished_parsedをdatetimeに変換する。不明な場合は古い日時を返す。"""
+    t = getattr(entry, "published_parsed", None)
+    if t is None:
+        return datetime.min.replace(tzinfo=timezone.utc)
+    return datetime(*t[:6], tzinfo=timezone.utc)
+
+
+def _is_recent(entry) -> bool:
+    """RSS掲載日が_MAX_AGE_DAYS以内のエントリのみ通す。日付不明は除外しない。"""
+    t = getattr(entry, "published_parsed", None)
+    if t is None:
+        return True
+    published = datetime(*t[:6], tzinfo=timezone.utc)
+    cutoff = datetime.now(timezone.utc) - timedelta(days=_MAX_AGE_DAYS)
+    return published >= cutoff
+
+
 def get_nagoya_news() -> dict[str, list[tuple[str, str]]]:
     result = {}
     for source, url in _FEEDS.items():
         try:
             feed = feedparser.parse(url)
+            entries = sorted(feed.entries, key=_published_dt, reverse=True)
             items = [
                 (e.title, e.link)
-                for e in feed.entries
-                if _is_upcoming(e)
+                for e in entries
+                if _is_upcoming(e) and _is_recent(e)
             ]
             result[source] = items[:_ITEMS_PER_SOURCE]
         except Exception:
