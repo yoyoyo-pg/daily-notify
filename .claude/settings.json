@@ -54,6 +54,11 @@
             "type": "command",
             "command": "BRANCH=$(git branch --show-current 2>/dev/null); if [ \"$BRANCH\" = \"main\" ]; then echo 'mainブランチで直接編集しようとしています。先にブランチを切ってください: git checkout -b claude/<作業内容>' >&2; exit 2; fi",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path // \"\"' 2>/dev/null); echo \"$FILE\" | grep -q '\\.env$' && echo '.env ファイルを直接編集しようとしています。本当に必要ですか？ .env.example を更新する場合は問題ありません。' >&2 && exit 2 || true",
+            "timeout": 5
           }
         ]
       }
@@ -64,7 +69,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path // .tool_response.filePath // \"\"' | grep -q '\\.py$' && python3 -m pytest tests/ --ignore=tests/test_calendar.py -q --tb=short 2>&1 | tail -20 || true",
+            "command": "FILE=$(jq -r '.tool_input.file_path // \"\"' 2>/dev/null); echo \"$FILE\" | grep -q '\\.py$' && python -m pytest tests/ --ignore=tests/test_calendar.py -q --tb=short 2>&1 | tail -20",
             "timeout": 60
           }
         ]
