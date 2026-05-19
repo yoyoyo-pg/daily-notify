@@ -1,6 +1,6 @@
 # daily-notify
 
-毎朝6時(JST)に天気・カレンダー・ニュースをDiscordへ通知し、毎晩21時(JST)に振り返りリマインダーを送るPythonスクリプト。GitHub Actionsで定期実行する。
+毎朝6時(JST)に天気・カレンダー・ニュースをDiscordへ通知するPythonスクリプト。GitHub Actionsで定期実行する。
 
 ## 技術スタック
 - Python 3.11

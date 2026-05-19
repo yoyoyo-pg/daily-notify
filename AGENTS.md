@@ -2,7 +2,7 @@
 
 ## プロジェクト概要
 
-毎朝6時(JST)に天気・Googleカレンダー・ニュースをDiscordへ通知し、毎晩21時(JST)に振り返りリマインダーを送るPythonスクリプト。GitHub Actionsで定期実行する。
+毎朝6時(JST)に天気・Googleカレンダー・ニュースをDiscordへ通知するPythonスクリプト。GitHub Actionsで定期実行する。
 
 ## リポジトリ構成
 
@@ -10,12 +10,12 @@
 daily-notify/
 ├── .github/workflows/
 │   ├── morning-notify.yml    # 朝通知（毎朝6時 JST = UTC 21:00）
-│   ├── evening-notify.yml    # 夜通知（毎晩21時 JST = UTC 12:00）
+│   ├── evening-notify.yml    # 夜通知（無効化済み・workflow_dispatch のみ）
 │   ├── events-notify.yml     # イベント通知（月・木 6時 JST）
 │   ├── sakanakun-notify.yml  # 技術ニュース通知（毎日6時 JST）
 │   └── test.yml              # PRテスト（pytest）
 ├── src/
-│   ├── reminkun/           # ショーンK（朝・夜通知）
+│   ├── reminkun/           # ショーンK（朝通知）
 │   │   ├── main.py
 │   │   ├── main_evening.py
 │   │   ├── weather.py

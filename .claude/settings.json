@@ -22,6 +22,7 @@
       "Bash(pip install *)",
       "Bash(pytest *)",
       "Bash(gh *)",
+      "Bash(codex *)",
       "Bash(awk *)",
       "Bash(xargs *)"
     ],
