@@ -17,7 +17,6 @@ _COLOR_WEATHER = 0x5DADE2
 _COLOR_CALENDAR = 0x2ECC71
 _COLOR_NEWS = 0xE67E22
 _COLOR_JOURNAL = 0x9B59B6
-_PERIOD_EMOJI = {"朝": "🌅", "昼": "☀️", "夜": "🌙"}
 
 
 def build_embeds() -> tuple[str, list[dict]]:
@@ -28,29 +27,14 @@ def build_embeds() -> tuple[str, list[dict]]:
 
     try:
         w = get_weather()
-        fields = []
-        for h in w.get("hourly_summary", []):
-            emoji = _PERIOD_EMOJI.get(h["label"], "🕐")
-            fields.append({
-                "name": f"{emoji} {h['label']}（{h['time']}）",
-                "value": f"{h['desc']}\n{h['temp']}°C  ☔{h['rain']}%",
-                "inline": True,
-            })
-        fields.append({
-            "name": "🌡 本日の気温レンジ",
-            "value": f"Max {w['temp_max']}°C / Min {w['temp_min']}°C",
-            "inline": False,
-        })
-        if not fields[:-1]:
-            fields = [
-                {"name": "🌡 テンペラチャー", "value": f"{w['temp']}°C（Max {w['temp_max']}°C / Min {w['temp_min']}°C）", "inline": True},
-                {"name": "☔ プレシピテーション", "value": f"{w['precip_prob']}%", "inline": True},
-            ]
         weather_embed = {
             "title": f"🌤 名古屋のウェザーコンディション：{w['desc']}",
             "url": w["url"],
             "color": _COLOR_WEATHER,
-            "fields": fields,
+            "fields": [
+                {"name": "🌡 気温", "value": f"{w['temp_min']}°C〜{w['temp_max']}°C", "inline": True},
+                {"name": "☔ 降水確率（最大）", "value": f"{w['precip_prob']}%", "inline": True},
+            ],
         }
     except Exception:
         weather_embed = {
